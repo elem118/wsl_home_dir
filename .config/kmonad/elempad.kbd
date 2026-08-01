@@ -1,0 +1,63 @@
+(defcfg
+  input  (low-level-hook)
+  output (send-event-sink)
+  cmp-seq ralt    
+  cmp-seq-delay 500 
+  key-seq-delay 0 
+  fallthrough true
+  allow-cmd true
+  implicit-around around
+)
+
+(defsrc
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc 
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \    
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret       
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft           
+  lctl fn   lmet   lalt           spc            ralt rctl
+)
+
+(defalias 
+  ct_es (tap-next-release esc lctl)
+  tab_met (tap-next-release tab lmet)
+  ;; to_l1 (layer-toggle l1)
+  to_l1 (sticky-key 500 (layer-toggle l1))
+  to_l3 (sticky-key 500 (layer-toggle l3))
+  to_l2 (sticky-key 500 (layer-toggle l2))
+  ;; comp_to_l1 (tap-hold 250 (layer-toggle l1) (layer-switch l1))
+  ;; comp_to_l3 (tap-hold 250 (layer-toggle l1) (layer-switch l3))
+  ;; comp_to_l2 (tap-hold 250 (layer-toggle l1) (layer-switch l2))
+)
+
+(deflayer l0
+  lsft      XX   @to_l3 @to_l2  @to_l1   XX   XX   @to_l1   @to_l2  @to_l3 XX  XX  XX  XX   
+  @tab_met  q    w    e    r    t    y    u    i    o    p    lalt   XX   XX  
+  @ct_es    a    s    d    f    g    h    j    k    l    ;    XX    ret     
+  bspc      z    x    c    v    b    n    m    .    \\   XX    rsft         
+  caps      fn   lmet lalt           spc            ralt rctl
+)
+
+(deflayer l1
+  lsft      XX  @to_l3 @to_l2  @to_l1   XX   XX    @to_l1   @to_l2  @to_l3  XX   XX   XX   XX   
+  @tab_met  S-q  S-w  S-e  S-r  S-t  S-y  S-u  S-i  S-o  S-p  lalt   XX   XX  
+  @ct_es    S-a  S-s  S-d  S-f  S-g  S-h  S-j  S-k  S-l  S-;  XX   S-ret    
+  bspc      S-z  S-x  S-c  S-v  S-b  S-n  S-m  ,    S-6  XX   rsft          
+  caps      fn   lmet lalt           spc            ralt rctl
+)
+
+(deflayer l2
+  lsft      XX  @to_l3 @to_l2  @to_l1   XX   XX    @to_l1   @to_l2  @to_l3  XX   XX   XX   XX  
+  @tab_met  1    2    3    4    5    6    7    8    9    0    lalt   XX   XX  
+  @ct_es    XX   XX   XX   XX   XX   XX   XX   XX   XX   '    XX    ret     
+  bspc      -    =    \\   `    XX   ]    S-.  S-/  S-]  XX    rsft         
+  caps      fn   lmet lalt           spc            ralt rctl
+)
+
+(deflayer l3
+  lsft      XX  @to_l3 @to_l2  @to_l1   XX   XX    @to_l1   @to_l2  @to_l3  XX   XX   XX   XX  
+  @tab_met  S-1  S-2  S-3  S-4  S-5  S-6  S-7  S-8  S-9  S-0  lalt   XX   XX  
+  @ct_es    XX   XX   XX   XX   XX   XX   XX   XX   XX   S-'  XX   ret      
+  bspc      S--  S-=  S-\\ S-`  XX   [    S-,  /    S-[  XX    rsft         
+  caps      fn   lmet lalt           spc            ralt rctl
+)
+
