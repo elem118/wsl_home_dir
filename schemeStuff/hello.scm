@@ -349,4 +349,113 @@
                   (rempick (sub1 n)
                            (cdr lat)))))))
       
- 
+(define rember*
+  (lambda (a l)
+    (cond
+       ((null? l) '())
+       ((atom? (car l))
+        (cond
+          ((eq? a (car l))
+           (rember* a (cdr l)))
+          (else (cons (car l)
+                      (rember* a (cdr l))))))
+       (else (cons (rember* a (car l))
+                   (rember* a (cdr l))))))) 
+
+(define l '((coffee) cup ((tea) cup) (and (hick)) cup))
+(define a 'cup)
+(rember* a l)
+
+(define insertR*
+  (lambda (new old l)
+    (cond
+      ((null? l) '())
+      ((atom? (car l)) 
+       (cond
+         ((eq? old (car l))
+          (cons (car l)
+                (cons new
+                      (insertR* new old (cdr l)))))
+         (else (cons (car l)
+                     (insertR* new old (cdr l))))))
+      (else (cons (insertR* new old (car l))
+                  (insertR* new old (cdr l)))))))
+          
+(define new 'roast)
+(define old 'chuck)
+(define l '((how much (wood))
+            could
+            ((a (wood) chuck))
+            (((chuck)))
+            (if (a) ((wood chuck)))
+            could chuck wood))
+(insertR* new old l)
+(insertL* new old l)
+
+(define occur*
+  (lambda (a l)
+    (cond
+      ((null? l) 0)
+      ((atom? (car l))
+       (cond
+         ((eq? a (car l))
+          (add1 (occur* a (cdr l))))
+         (else (occur* a (cdr l)))))
+      (else (plus (occur* a (car l))
+                  (occur* a (cdr l)))))))
+
+(define a 'banana)
+(define l '((banana)
+            (split ((((banana ice)))
+                    (cream (banana))
+                    sherbet))
+            (banana)
+            (bread)
+            (banana brandy)))
+(occur* a l)
+
+(define subst*
+  (lambda (new old l)
+    (cond
+      ((null? l) '())
+      ((atom? (car l))
+       (cond
+         ((eq? old (car l))
+          (cons new
+                (subst* new old (cdr l))))
+         (else (cons (car l)
+                     (subst* new old (cdr l))))))
+      (else (cons (subst* new old (car l))
+                  (subst* new old (cdr l)))))))
+
+(define new 'orange)
+(define old 'banana)
+(subst* new old l)
+(member* new l)
+
+(define insertL*
+  (lambda (new old l)
+    (cond
+      ((null? l) '())
+      ((atom? (car l))
+       (cond
+         ((eq? old (car l))
+          (cons new
+                (cons old
+                      (insertL* new old (cdr l)))))
+         (else (cons (car l)
+                     (insertL* new old (cdr l))))))
+      (else (cons (insertL* new old (car l))
+                  (insertL* new old (cdr l)))))))
+
+(define member*
+  (lambda (a l)
+    (cond
+      ((null? l) #f)
+      ((atom? (car l))
+       (cond
+         ((eq? a (car l))
+          #t)
+         (else (member* a (cdr l)))))
+      (else (or (member* a (car l))
+                (member* a (cdr l)))))))
