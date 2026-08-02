@@ -296,12 +296,57 @@
 (rempick 1 y)
 (rempick 3 y)
 
+(define no-nums
+  (lambda (lat)
+    (cond
+      ((null? lat) '())
+      ((not (number? (car lat))) (cons (car lat)
+                                       (no-nums (cdr lat))))
+      (else (no-nums (cdr lat))))))
 
+(define z '(5 pears 6 prunes 9 dates))
+(no-nums z)
+(all-nums z)
 
+(define all-nums
+  (lambda (lat)
+    (cond
+      ((null? lat) '())
+      ((number? (car lat)) (cons (car lat)
+                                 (all-nums (cdr lat))))
+      (else (all-nums (cdr lat))))))
 
+(define eqan?
+  (lambda (a1 a2)
+    (cond
+      ((and (number? a1) (number? a2))
+       (eq a1 a2))
+      ((and (not (number? a1)) (not (number? a2)))
+       (eq? a1 a2))
+      (else #f))))
 
+(define occur
+  (lambda (a lat)
+    (cond
+      ((null? lat) 0)
+      ((eqan? a
+              (car lat))
+       (add1 (occur a (cdr lat))))
+      (else (occur a (cdr lat))))))
 
+(define arr1 '(1 2 3 1 3 1 5 7))
+(occur 0 arr1)
 
+(define one?
+  (lambda (a)
+    (eq 1 a)))
 
-
-
+(define rempick
+  (lambda (n lat)
+    (cond
+      ((one? n) (cdr lat))
+      (else (cons (car lat)
+                  (rempick (sub1 n)
+                           (cdr lat)))))))
+      
+ 
