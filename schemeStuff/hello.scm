@@ -468,3 +468,24 @@
 
 (define l '((potato) (chips ((with) fish) (chips))))
 (leftmost l)
+
+(define eqlist?
+  (lambda (l1 l2)
+    (cond
+      ((and (null? l1)
+            (null? l2))
+       #t)
+      ((or (null? l1) (null? l2))
+       #f)
+      ((and (atom? (car l1))
+            (atom? (car l2)))
+       (cond
+         ((eq? (car l1) (car l2))
+          (eqlist? (cdr l1) (cdr l2)))
+         (else #f)))
+      (else (and (eqlist? (car l1) (car l2))
+                 (eqlist? (cdr l1) (cdr l2)))))))
+
+(define l1 '(banana ((split))))
+(define l2 '((banana) (split)))
+(eqlist? l1 l2)
