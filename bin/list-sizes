@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+for item in $(ls -la | awk 'NR!=1 {print $NF}'); do
+  du --summarize -m "$item"
+done
