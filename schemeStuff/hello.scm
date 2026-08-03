@@ -391,3 +391,23 @@
           (atom? s2))
        #f)
       (else (eqlist? s1 s2)))))
+
+(define eqlist??
+  (lambda (l1 l2)
+    (cond
+      ((and (null? l1) (null l2))
+       #t)
+      ((or (null? l1)
+          (null? l2)) #f)
+      (else (and (equal?? (car l1) (car l2))
+                 (eqlist?? (cdr l1)
+                           (cdr l2)))))))
+(define remberS
+  (lambda (s l)
+    (cond
+      ((null? l) '())
+      ((equal?? s (car l))
+       (cdr l))
+      (else (cons (car l)
+                  (remberS s (cdr l)))))))
+
