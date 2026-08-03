@@ -23,21 +23,11 @@
       ((eq? a (car lat)) (cdr lat))
       (else (cons (car lat) (rember a (cdr lat)))))))
 
-(define x '(1 2 3 4 5))
-(member? 3 x)
-(rember 3 x)
-(null? '())
-
 (define firsts
   (lambda (lat)
     (cond
       ((null? lat) '())
       (else (cons (car (car lat)) (firsts (cdr lat)))))))
-
-(define l '((1 2)
-            (3 4)
-            (5 6)))
-(firsts l)
 
 (define insertR
   (lambda (new old lat)
@@ -48,24 +38,6 @@
               (else (cons
                       (car lat)
                       (insertR new old (cdr lat)))))))))
-
-(define n 'e)
-(define o 'd)
-(define l '(a b c d f g d h))
-(insertR n o l)
-(multirember o l)
-(multiinsertR n o l)
-(multiinsertL n o l)
-(multisubst n o l)
-
-(define n '1)
-(define o '0)
-(define o2 '7)
-(define l '(1 2 3 4 5 6 7 8))
-(insertR n o l)
-(insertL n o l)
-(subst n o l)
-(subst2 n o o2 l)
 
 (define insertL
   (lambda (new old lat)
@@ -158,15 +130,11 @@
       ((zero? b) a)
       (else (add1 (plus a (sub1 b)))))))
 
-(plus 5 10)
-
 (define minus
   (lambda (a b)
     (cond
       ((zero? b) a)
       (else (sub1 (minus a (sub1 b)))))))
-
-(minus 2 1)
 
 (define addtup
   (lambda (tup)
@@ -175,18 +143,12 @@
       (else (plus (car tup)
                (addtup (cdr tup)))))))
 
-(define tup1 '(1 2 3 4 5))
-(addtup tup1)
-
 (define into
   (lambda (m n)
     (cond
-      ((zero? n) 0))
-    (else (plus m
-                (into m (sub1 n))))))
-
-(into 2 5)
-(into 7 9)
+      ((zero? n) 0)
+      (else (plus m
+                  (into m (sub1 n)))))))
 
 (define tup+
   (lambda (tup1 tup2)
@@ -196,23 +158,11 @@
       (else (cons (plus (car tup1) (car tup2))
                   (tup+ (cdr tup1) (cdr tup2)))))))
 
-(define tup2 '(5 5 5 5 5 5 5))
-(tup+ tup1 tup2)
-
-;---------- 
-; PAREDIT
-;---------- 
-
-(hello (from the other) side)
-(m n (a b)) (x y)
 
 ;-------------------- 
 ;Back to Numbers
 ;-------------------- 
 ;
-(> 12 50)
-(gt 12 50)
-
 (define gt
   (lambda (m n)
     (cond
@@ -227,23 +177,11 @@
       ((zero? m) #t)
       (else (lt (sub1 m) (sub1 n))))))
 
-(< 12 50)
-(lt 12 50)
-(lt 10 10)
-
-(= 10 10)
-
-(eq 10 10)
-(eq 1 2)
-
 (define eq
   (lambda (m n)
     (cond
       ((and (not (gt m n)) (not (lt m n))) #t) 
       (else #f))))
-
-(^ 2 3)
-(expt 2 3)
 
 (define ^
   (lambda (m n)
@@ -251,10 +189,6 @@
       ((zero? n) 1)
       (else (into m
                   (^ m (sub1 n)))))))
-
-(// 4 2)
-(// 7 3)
-(quotient 7 3)
 
 (define //
   (lambda (n m)
@@ -269,10 +203,6 @@
       ((null? lat) 0)
       (else (add1 (length (cdr lat)))))))
 
-(define x '(1 2 3 4 5))
-(length x)
-(length_ x)
-
 (define pick
   (lambda (n lat)
     (cond
@@ -281,11 +211,6 @@
       (else (pick (sub1 n)
                   (cdr lat))))))
 
-(pick 5 x)
-(define y '(lasagna spaghetti ravioli macaroni meatball))
-(pick 4 y)
-(pick 0 y)
-
 (define rempick
   (lambda (n lat)
     (cond
@@ -293,9 +218,6 @@
       (else (cons (car lat)
                   (rempick (sub1 n)
                            (cdr lat)))))))
-(rempick 1 y)
-(rempick 3 y)
-
 (define no-nums
   (lambda (lat)
     (cond
@@ -303,10 +225,6 @@
       ((not (number? (car lat))) (cons (car lat)
                                        (no-nums (cdr lat))))
       (else (no-nums (cdr lat))))))
-
-(define z '(5 pears 6 prunes 9 dates))
-(no-nums z)
-(all-nums z)
 
 (define all-nums
   (lambda (lat)
@@ -334,9 +252,6 @@
        (add1 (occur a (cdr lat))))
       (else (occur a (cdr lat))))))
 
-(define arr1 '(1 2 3 1 3 1 5 7))
-(occur 0 arr1)
-
 (define one?
   (lambda (a)
     (eq 1 a)))
@@ -349,6 +264,10 @@
                   (rempick (sub1 n)
                            (cdr lat)))))))
       
+;----------
+; STARS
+;----------
+
 (define rember*
   (lambda (a l)
     (cond
@@ -361,10 +280,6 @@
                       (rember* a (cdr l))))))
        (else (cons (rember* a (car l))
                    (rember* a (cdr l))))))) 
-
-(define l '((coffee) cup ((tea) cup) (and (hick)) cup))
-(define a 'cup)
-(rember* a l)
 
 (define insertR*
   (lambda (new old l)
@@ -380,17 +295,6 @@
                      (insertR* new old (cdr l))))))
       (else (cons (insertR* new old (car l))
                   (insertR* new old (cdr l)))))))
-          
-(define new 'roast)
-(define old 'chuck)
-(define l '((how much (wood))
-            could
-            ((a (wood) chuck))
-            (((chuck)))
-            (if (a) ((wood chuck)))
-            could chuck wood))
-(insertR* new old l)
-(insertL* new old l)
 
 (define occur*
   (lambda (a l)
@@ -403,16 +307,6 @@
          (else (occur* a (cdr l)))))
       (else (plus (occur* a (car l))
                   (occur* a (cdr l)))))))
-
-(define a 'banana)
-(define l '((banana)
-            (split ((((banana ice)))
-                    (cream (banana))
-                    sherbet))
-            (banana)
-            (bread)
-            (banana brandy)))
-(occur* a l)
 
 (define subst*
   (lambda (new old l)
@@ -427,11 +321,6 @@
                      (subst* new old (cdr l))))))
       (else (cons (subst* new old (car l))
                   (subst* new old (cdr l)))))))
-
-(define new 'orange)
-(define old 'banana)
-(subst* new old l)
-(member* new l)
 
 (define insertL*
   (lambda (new old l)
@@ -483,9 +372,22 @@
          ((eq? (car l1) (car l2))
           (eqlist? (cdr l1) (cdr l2)))
          (else #f)))
+      ((or (atom? (car l1))
+           (atom? (car l2)))
+       #f)
       (else (and (eqlist? (car l1) (car l2))
                  (eqlist? (cdr l1) (cdr l2)))))))
 
 (define l1 '(banana ((split))))
 (define l2 '((banana) (split)))
 (eqlist? l1 l2)
+
+(define equal??
+  (lambda (s1 s2)
+    (cond
+      ((and (atom? s1) (atom? s2))
+       (eqan? s1 s2))
+      ((or (atom? s1)
+          (atom? s2))
+       #f)
+      (else (eqlist? s1 s2)))))
